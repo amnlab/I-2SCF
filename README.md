@@ -12,6 +12,7 @@
 <h1>Test Environment & Parameter Setting</h1>
 <p align="center">
 <img src="https://github.com/amnlab/I-2SCF/assets/143478273/355e705e-5fcb-4061-ac48-8ab7ee3c313b" width="500">
+</br>
 <img src="https://github.com/amnlab/I-2SCF/assets/143478273/d0b98541-6360-4c9f-8767-339052663efa" width="500">
 </p>
 
