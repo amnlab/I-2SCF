@@ -41,3 +41,6 @@
 <p align="center">
 <img src="https://github.com/amnlab/I-2SCF/assets/143478273/b6cc009d-3a12-4d30-8fd9-0a4a51a3be13" width="500">
 </p>
+<body>
+  Inter-Layer Split Computing과 Inter- and Intra-Layer Split Computing의 추론 지연 시간을 각각 측정하여 얼마나 감소했는지 확인을 해본 결과, CASE1에서는 Inter- and Intra-Layer Split Computing이 Inter-Layer Split Computing 보다 40% 감소시킨 것으로 확인되고, CASE2에서는 Inter- and Intra-Layer Split Computing이 Inter-Layer Split Computing 보다 12.7% 감소시킨 것으로 확인되며, CASE1에서는 최종 개발목표(30% 감소)에도 부합하는 결과이다.
+</body>
