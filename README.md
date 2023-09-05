@@ -35,6 +35,8 @@
 <body>
   Inter- and Intra-Layer Split을 하기 위해 공개된 모델 VGG16을 활용하여 시험을 진행한다. 총 16개의 Layer로 input shape이 (32, 32, 3)을 가진 모델이다.
   또한 Data는 60000개의 32*32 픽셀 컬러이미지가 10개의 클래스로 라벨링 되어있는 CIFAR10을 사용한다.
+
+  We are conducting an experiment using the VGG16 model to perform inter- and intra-layer splits. VGG16 consists of a total of 16 layers and has an input shape of (32, 32, 3). Additionally, we are using the CIFAR-10 dataset, which contains 60,000 color images. Image size is 32x32 pixels, and each labeled into 10 different classes.
 </body>
 
 </br><h1>Test Result</h1>
@@ -42,5 +44,5 @@
 <img src="https://github.com/amnlab/I-2SCF/assets/143478273/b6cc009d-3a12-4d30-8fd9-0a4a51a3be13" width="500">
 </p>
 <body>
-  Inter-Layer Split Computing과 Inter- and Intra-Layer Split Computing의 추론 지연 시간을 각각 측정하여 얼마나 감소했는지 확인을 해본 결과, CASE1에서는 Inter- and Intra-Layer Split Computing이 Inter-Layer Split Computing 보다 40% 감소시킨 것으로 확인되고, CASE2에서는 Inter- and Intra-Layer Split Computing이 Inter-Layer Split Computing 보다 12.7% 감소시킨 것으로 확인되며, CASE1에서는 최종 개발목표(30% 감소)에도 부합하는 결과이다.
+  Inter-Layer Split Computing과 Inter- and Intra-Layer Split Computing의 추론 지연 시간을 각각 측정하여 얼마나 감소했는지 확인을 해본 결과, CASE1에서는 Inter- and Intra-Layer Split Computing이 Inter-Layer Split Computing 보다 40% 감소시킨 것으로 확인되고, CASE2에서는 Inter- and Intra-Layer Split Computing이 Inter-Layer Split Computing 보다 12.7% 감소시킨 것으로 확인된다.
 </body>
