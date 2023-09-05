@@ -1,12 +1,16 @@
 <h1>Proposed Method</h1>
-<body>대부분의 기존 분할컴퓨팅(split computing)연구에서 계층 간 분할(Inter-layer split)에 초점을 두는데 DNN의 각 계층을 여러 개의 독립적인 실행단위로 분리시킨다면 inference latency를 추가적으로 줄일 수 있다. 따라서 본 논문은 계층 간 분할(Inter-layer split) 및 계층 내 분할(Intra-layer split) 컴퓨팅 프레임 워크 Inter- and Intra-Layer Split Computing를 제안한다. Most of the existing research in split computing tends to focus on inter-layer split. However, if we separate each layer of a DNN into multiple independent execution units, we can further reduce inference latency. Therefore, this paper proposes a computing framework called "Inter- and Intra-Layer Split Computing," which aims to address both inter-layer split and intra-layer split, with the goal of achieving additional reductions in inference latency.</body>
+<body>
+  대부분의 기존 분할컴퓨팅(split computing)연구에서 계층 간 분할(Inter-layer split)에 초점을 두는데 DNN의 각 계층을 여러 개의 독립적인 실행단위로 분리시킨다면 inference latency를 추가적으로 줄일 수 있다. 따라서 본 논문은 계층 간 분할(Inter-layer split) 및 계층 내 분할(Intra-layer split) 컴퓨팅 프레임 워크 Inter- and Intra-Layer Split Computing를 제안한다. 
+  </br>
+  Most of the existing research in split computing tends to focus on inter-layer split. However, if we separate each layer of a DNN into multiple independent execution units, we can further reduce inference latency. Therefore, this paper proposes a computing framework called "Inter- and Intra-Layer Split Computing," which aims to address both inter-layer split and intra-layer split, with the goal of achieving additional reductions in inference latency.</body>
 
 </br><h1>System Model</h1>
 <p align="center">
 <img src="https://github.com/amnlab/I-2SCF/assets/143478273/6f484f2e-8700-4cdd-b9a5-b3639bd89b59" width="500">
 </p>
 </br>
-<body>컴퓨팅 노드가 계층적으로 분산되어 T개의 Tier가 있다고 가정하고 Central cloud에서 Tier간 링크의 전송속도와 컴퓨팅 노드의 가용 컴퓨팅 파워를 수집한다. 이렇게 수집한 정보를 기반으로 inference latency를 효율적으로 줄이기 위해 계층 간 분할(Inter-layer split)과 계층 내 분할(Intra-layer split)지점 결정 후 결정된 지점을 각 컴퓨팅 노드에 전송한다. 
+<body>
+  컴퓨팅 노드가 계층적으로 분산되어 T개의 Tier가 있다고 가정하고 Central cloud에서 Tier간 링크의 전송속도와 컴퓨팅 노드의 가용 컴퓨팅 파워를 수집한다. 이렇게 수집한 정보를 기반으로 inference latency를 효율적으로 줄이기 위해 계층 간 분할(Inter-layer split)과 계층 내 분할(Intra-layer split)지점 결정 후 결정된 지점을 각 컴퓨팅 노드에 전송한다. 
   </br>
   Assuming that computing nodes are hierarchically distributed into T tiers, the Central cloud collects information on the transmission speed of links between tiers and the available computing power of computing nodes. Based on this gathered information, Central node decides optimal splitting points with the goal of efficiently reduce inference latency. Once these splitting points are determined, they are transmitted to each computing node.</body>
 
