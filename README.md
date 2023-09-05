@@ -22,7 +22,7 @@
   - GPU: NVIDA GeForce RTX 4090
   - MEM: 32GB
   - SSD/HDD:
-  
+
   (S/W)
   - OS: Ubuntu 64-bit 20.04
   - Python 2.7.18
