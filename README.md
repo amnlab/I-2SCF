@@ -32,3 +32,12 @@
 </body>
 
 <h1>Test Model & Test Data</h1>
+<body>
+  Inter- and Intra-Layer Split을 하기 위해 공개된 모델 VGG16을 활용하여 시험을 진행한다. 총 16개의 Layer로 input shape이 (32, 32, 3)을 가진 모델이다.
+  또한 Data는 60000개의 32*32 픽셀 컬러이미지가 10개의 클래스로 라벨링 되어있는 CIFAR10을 사용한다.
+</body>
+
+<h1>Test Result</h1>
+<p align="center">
+<img src="https://github.com/amnlab/I-2SCF/assets/143478273/b6cc009d-3a12-4d30-8fd9-0a4a51a3be13" width="500">
+</p>
