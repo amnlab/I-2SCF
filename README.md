@@ -17,12 +17,13 @@
 
 <h1>Test Equipment</h1>
 <body>
+
   (H/W)
   - CPU: 12th Gen Intel(R) Core(TM) i7-12700K 3.60 GHz
   - GPU: NVIDA GeForce RTX 4090
   - MEM: 32GB
   - SSD/HDD:
-
+    
   (S/W)
   - OS: Ubuntu 64-bit 20.04
   - Python 2.7.18
