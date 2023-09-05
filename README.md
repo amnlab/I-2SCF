@@ -17,10 +17,10 @@
 
 <h1>Test Equipment</h1>
 <body>
-(H/W)
+(H/W) <br>
 - 뮹
 
-(S/W)
+(S/W) <br>
 - OS: Ubuntu 64-bit 20.04
 - Python 2.7.18
 - Tensorflow 2.12.0
