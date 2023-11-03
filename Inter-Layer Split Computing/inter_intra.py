@@ -1,21 +1,3 @@
-# -*-  Mode: Python; -*-
-# /*
-#  * This program is free software; you can redistribute it and/or modify
-#  * it under the terms of the GNU General Public License version 2 as
-#  * published by the Free Software Foundation;
-#  *
-#  * This program is distributed in the hope that it will be useful,
-#  * but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  * GNU General Public License for more details.
-#  *
-#  * You should have received a copy of the GNU General Public License
-#  * along with this program; if not, write to the Free Software
-#  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#  *
-#  * Ported to Python by Mohit P. Tahiliani
-#  */
-
 import ns.core
 import ns.network
 import ns.point_to_point
@@ -26,17 +8,6 @@ import ns.csma
 import ns.internet
 import sys
 import subprocess
-
-# // Default Network Topology
-# //
-# //   Wifi 10.1.3.0
-# //                 AP
-# //  *    *    *    *
-# //  |    |    |    |    10.1.1.0
-# // n5   n6   n7   n0 -------------- n1   n2   n3   n4
-# //                   point-to-point  |    |    |    |
-# //                                   ================
-# //                                     LAN 10.1.2.0
 
 cmd = ns.core.CommandLine()
 cmd.csma_node = 1
@@ -155,7 +126,7 @@ csmaDevices2 = csma2.Install(csmaNodes2)
 #############################################################################################################
 csmaDevices3 = csma3.Install(csmaNodes3)
 #############################################################################################################
-information = [["csmaTier0", 200, "x", 50, 100, 60], # 4, 5, 7/ 50 70 100 / 20, 30, 60/ 5, 15, 60
+information = [["csmaTier0", 200, "x", 50, 100, 60], 
                ["csmaTier1", 200, 450, 50, 100, 70], 
                ["csmaTier2", "x", 450, 50, 100, 100]]
 csmaTier0_info = [["csmaNode0" ,350, 3],["csmaNode1", 350,5]]
@@ -236,9 +207,3 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
 ns.core.Simulator.Stop(ns.core.Seconds(10.0))
 #############################################################################################################
-#pointToPoint.EnablePcapAll ("inter_intra")
-#phy.EnablePcap ("inter_intra", apDevices.Get (0))
-#csma.EnablePcap ("inter_intra", csmaDevices.Get (0), True)
-
-#ns.core.Simulator.Run()
-#ns.core.Simulator.Destroy()
