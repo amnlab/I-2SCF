@@ -1,20 +1,24 @@
 import inter_intra
 import numpy as np
 import networkx as nx
-print("=========================================================")
-print("=================Central node execute====================")
-print("=========================================================")
+print("======================================================================================")
+print("Central Node Execute")
+print("======================================================================================")
 
 T = 3
 R_tt = [inter_intra.information[0][1], inter_intra.information[1][2]]
 C_t = [inter_intra.information[0][5], inter_intra.information[1][5], inter_intra.information[2][5]]
 
 layer_input_size = [32, 16, 16, 8, 8, 8, 4, 4, 4, 2, 2, 2, 1]
-power = [[inter_intra.csmaTier0_info[0][2], [inter_intra.csmaTier0_info[1][2]], [inter_intra.csmaTier1_info[0][2], inter_intra.csmaTier1_info[1][2]], [inter_intra.csmaTier2_info[0][2], inter_intra.csmaTier2_info[1][2]]
-# Neural Network
+
+power = [[inter_intra.csmaTier0_info[0][2], inter_intra.csmaTier0_info[1][2], inter_intra.csmaTier0_info[2][2]], 
+[inter_intra.csmaTier1_info[0][2], inter_intra.csmaTier1_info[1][2], inter_intra.csmaTier1_info[2][2]], 
+[inter_intra.csmaTier2_info[0][2], inter_intra.csmaTier2_info[1][2], inter_intra.csmaTier2_info[2][2]]]
+## Neural Network
 L = 13
 D_l = [3072, 16384, 32768, 8192, 16384, 16384, 4096, 8192, 8192, 2048, 2048, 2048, 512] #input size
 F_l = [81, 38, 76, 38, 76, 76, 38, 76, 76, 18, 18, 18, 0] #GFlop
+#F_l = [324, 152, 304, 152, 304, 304, 152, 304, 304, 72, 72, 72, 0] #GFlop
 padding = [0, 2.5, 5, 5, 9.5, 9.5, 9.5, 19, 19, 0, 0, 0, 0] #padding GFlop
 tau_R = 0.1
 
@@ -85,93 +89,109 @@ else:
 
 for i in range(3):
     for j in range(2):
-        if Tier_[i][j] == 13:	
+        if Tier_[i][j] == 13:   
             Tier_[i][j] = 9
 
-print("PATH", Tier_print)
-Node_ = []
-for i in range(0, 3):
-    if i == 0:
-        Node_.append([[]])
-        node = power[i].index(max(power[i]))
-        if(node == 0):
-            Node_[i][0].append(layer_input_size[Tier_[i][0] - 1])
-            Node_[i][0].append(0)
-        elif(node == 1):
-            Node_[i][0].append(0)
-            Node_[i][0].append(layer_input_size[Tier_[i][0] - 1])
-        for j in range(Tier_[i][0] + 1, Tier_[i][1] + 1):
-            if Tier_[i][0] == Tier_[i][1] and Tier_[i][0] != 0:
-                Node_.append([[]])
-                node = power[i].index(max(power[i]))
-                if(node == 0):
-                    Node_[i][0].append(layer_input_size[j - 1])
-                    Node_[i][0].append(0)
-                elif(node == 1):
-                    Node_[i][0].append(0)
-                    Node_[i][0].append(layer_input_size[j - 1])
+print("[Inter Policy]")
+for i in range(3):
+    print("Tier", i, "Splitting Point :", Tier_print[i])
 
-            elif Tier_[i][0] != Tier_[i][1] and Tier_[i][0] != 0:
-                if j == Tier_[i][0]:
-                    Node_.append([])
-                if j >= 11:
-                    node = power[i].index(max(power[i]))
-                    if (node == 0):
-                        split_point = [layer_input_size[j - 1], 0]
-                        Node_[i].append(split_point)
-                    if (node == 1):
-                        split_point = [0, layer_input_size[j - 1]]
-                        Node_[i].append(split_point)
-                else:
-                    split_point1 = round(power[i][0] * (layer_input_size[j - 1]/(power[i][0] + power[i][1])))
-                    split_point2 = round(power[i][1] * (layer_input_size[j - 1]/(power[i][0] + power[i][1])))
-                    if split_point1 % 2 == 1 or split_point2 % 2 == 1:
-                        node = power[i].index(max(power[i]))
-                        if (node == 0):
-                            split_point1 = split_point1 + 1
-                            split_point2 = split_point2 - 1
-                        elif (node == 1):
-                            split_point1 = split_point1 - 1
-                            split_point2 = split_point2 + 1
-                    split_point = [split_point1, split_point2]
-                    Node_[i].append(split_point)
+def express_as_weighted_sum(k, weights):  # j = 3, 6, 9
+    if len(weights) == 3:  # 가중치 리스트의 길이가 3인지 확인
+
+        # 각 가중치의 인덱스와 값을 함께 저장
+        weighted_indices = list(enumerate(weights))
+        # 가중치를 기준으로 내림차순 정렬
+        weighted_indices.sort(key=lambda x: x[1], reverse=True)
+
+        # 각 가중치를 k와 비례하도록 정규화
+        normalized_weights = [weight / sum(weights) for weight in weights]
+
+        a, b, c = 0, 0, 0
+
+        if k == 4:  # 4*4 예외 처리
+            count = 0
+            for index, _ in weighted_indices:
+                if index == 0:
+                    a = 2
+                elif index == 1:
+                    b = 2
+                elif index == 2:
+                    c = 2
+
+                count += 1
+                if count == 2:
+                    break
+            return [a, b, c]
+
+        # 각 변수에 정규화된 가중치를 적용하여 할당
+        a = int(normalized_weights[0] * k)
+        b = int(normalized_weights[1] * k)
+        c = int(normalized_weights[2] * k)
+
+        # 남은 차이를 가중치가 큰 순서대로 더해주기
+        diff = k - (a + b + c)
+        for index, _ in weighted_indices:
+            if diff > 0:
+                if index == 0:
+                    a += 1
+                elif index == 1:
+                    b += 1
+                elif index == 2:
+                    c += 1
+                diff -= 1
+            else:
+                break
+
+        # 짝수 변환 과정
+        if a % 2 == 1 and b % 2 == 1:
+            if a == b:
+                a -= 1
+                b += 1
+            else:
+                a += 1
+                b -= 1
+        elif b % 2 == 1 and c % 2 == 1:
+            if b == c:
+                b -= 1
+                c += 1
+            else:
+                b += 1
+                c -= 1
+        elif a % 2 == 1 and c % 2 == 1:
+            if a == c:
+                a -= 1
+                c += 1
+            else:
+                a += 1
+                c -= 1
+
+        # 결과 반환
+        return [a, b, c]
     else:
-        for j in range(Tier_[i][0], Tier_[i][1] + 1):
-            if Tier_[i][0] == Tier_[i][1] and Tier_[i][0] != 0 or Tier_[i][0] == 1:
-                Node_.append([[]])
-                node = power[i].index(max(power[i]))
-                if(node == 0):
-                    Node_[i][0].append(layer_input_size[j - 1])
-                    Node_[i][0].append(0)
-                elif(node == 1):
-                    Node_[i][0].append(0)
-                    Node_[i][0].append(layer_input_size[j - 1])
+        # 조건에 맞지 않으면 예외 처리
+        print("주어진 k 값이 2의 배수가 아니거나, 가중치 리스트의 길이가 3이 아닙니다.")
+        return None
 
-            elif Tier_[i][0] != Tier_[i][1] and Tier_[i][0] != 0:
-                if j == Tier_[i][0]:
-                    Node_.append([])
-                if j >= 11:
-                    node = power[i].index(max(power[i]))
-                    if (node == 0):
-                        split_point = [layer_input_size[j - 1], 0]
-                        Node_[i].append(split_point)
-                    if (node == 1):
-                        split_point = [0, layer_input_size[j - 1]]
-                        Node_[i].append(split_point)
-                else:
-                    split_point1 = round(power[i][0] * (layer_input_size[j - 1]/(power[i][0] + power[i][1])))
-                    split_point2 = round(power[i][1] * (layer_input_size[j - 1]/(power[i][0] + power[i][1])))
-                    if split_point1 % 2 == 1 or split_point2 % 2 == 1:
-                        node = power[i].index(max(power[i]))
-                        if (node == 0):
-                            split_point1 = split_point1 + 1
-                            split_point2 = split_point2 - 1
-                        elif (node == 1):
-                            split_point1 = split_point1 - 1
-                            split_point2 = split_point2 + 1
-                    split_point = [split_point1, split_point2]
-                    Node_[i].append(split_point)
-    
-    
-print("SplitPoint", Node_)
+Layer_size1 = layer_input_size[Tier_[0][0] - 1:Tier_[0][1]]
+Layer_size2 = layer_input_size[Tier_[1][0] - 1:Tier_[1][1]]
+Layer_size3 = layer_input_size[Tier_[2][0] - 1:Tier_[2][1]]
 
+Node_ = []
+Node_.append([])
+for i in range(0, len(Layer_size1)):
+    Node_[0].append(express_as_weighted_sum(Layer_size1[i], power[0]))
+Node_.append([])   
+for i in range(0, len(Layer_size2)):
+    Node_[1].append(express_as_weighted_sum(Layer_size2[i], power[1]))
+Node_.append([])
+for i in range(0, len(Layer_size3)):
+    Node_[2].append(express_as_weighted_sum(Layer_size3[i], power[2]))
+Node_[2].append([0, 0, 2])
+Node_[2].append([0, 0, 2])
+Node_[2].append([0, 0, 2])
+Node_[2].append([0, 0, 1])
+print("[Intra Policy]")
+for i in range(3):
+    print("Tier", i, "Splitting Point :", Node_[i])
+    
