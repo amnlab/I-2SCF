@@ -1,3 +1,21 @@
+# -*-  Mode: Python; -*-
+# /*
+#  * This program is free software; you can redistribute it and/or modify
+#  * it under the terms of the GNU General Public License version 2 as
+#  * published by the Free Software Foundation;
+#  *
+#  * This program is distributed in the hope that it will be useful,
+#  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  * GNU General Public License for more details.
+#  *
+#  * You should have received a copy of the GNU General Public License
+#  * along with this program; if not, write to the Free Software
+#  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#  *
+#  * Ported to Python by Mohit P. Tahiliani
+#  */
+
 import ns.core
 import ns.network
 import ns.point_to_point
@@ -8,6 +26,18 @@ import ns.csma
 import ns.internet
 import sys
 import subprocess
+import random
+
+# // Default Network Topology
+# //
+# //   Wifi 10.1.3.0
+# //                 AP
+# //  *    *    *    *
+# //  |    |    |    |    10.1.1.0
+# // n5   n6   n7   n0 -------------- n1   n2   n3   n4
+# //                   point-to-point  |    |    |    |
+# //                                   ================
+# //                                     LAN 10.1.2.0
 
 cmd = ns.core.CommandLine()
 cmd.csma_node = 1
@@ -24,22 +54,22 @@ verbose = cmd.verbose
 wifi_node = int(cmd.wifi_node)
 
 if wifi_node > 18:
-	print ("Number of wifi nodes "+ str(wifi_node)+ " specified exceeds the mobility bounding box")
-	sys.exit(1)
+   print ("Number of wifi nodes "+ str(wifi_node)+ " specified exceeds the mobility bounding box")
+   sys.exit(1)
 
 if verbose == "True":
-	ns.core.LogComponentEnable("UdpEchoClientApplication", ns.core.LOG_LEVEL_INFO)
-	ns.core.LogComponentEnable("UdpEchoServerApplication", ns.core.LOG_LEVEL_INFO)
-#############################################################################################################	
+   ns.core.LogComponentEnable("UdpEchoClientApplication", ns.core.LOG_LEVEL_INFO)
+   ns.core.LogComponentEnable("UdpEchoServerApplication", ns.core.LOG_LEVEL_INFO)
+#############################################################################################################   
 p2pNodes = ns.network.NodeContainer()
 p2pNodes.Create(2)
 
 pointToPoint = ns.point_to_point.PointToPointHelper()
-pointToPoint.SetDeviceAttribute("DataRate", ns.core.StringValue("100Mbps"))
+pointToPoint.SetDeviceAttribute("DataRate", ns.core.StringValue("5Mbps"))
 pointToPoint.SetChannelAttribute("Delay", ns.core.StringValue("2ms"))
 
 p2pDevices = pointToPoint.Install(p2pNodes)
-#############################################################################################################	
+#############################################################################################################   
 wifiStaNodes = ns.network.NodeContainer()
 wifiStaNodes.Create(wifi_node)
 wifiApNode = p2pNodes.Get(0)
@@ -100,7 +130,7 @@ csma2.SetChannelAttribute("Delay", ns.core.TimeValue(ns.core.NanoSeconds(6560)))
 
 csmaDevices0 = csma0.Install(csmaNodes0)
 #############################################################################################################
-csmaNodes1.Add(p2pNodes.Get(1))
+csmaNodes0.Add(p2pNodes.Get(1))
 csma0.SetChannelAttribute("DataRate", ns.core.StringValue("100Mbps"))
 csma0.SetChannelAttribute("Delay", ns.core.TimeValue(ns.core.NanoSeconds(6560)))
 
@@ -126,13 +156,29 @@ csmaDevices2 = csma2.Install(csmaNodes2)
 #############################################################################################################
 csmaDevices3 = csma3.Install(csmaNodes3)
 #############################################################################################################
-information = [["csmaTier0", 200, "x", 50, 100, 10], 
-               ["csmaTier1", 200, 450, 50, 100, 15], 
-               ["csmaTier2", "x", 450, 50, 100, 60]]
-csmaTier0_info = [["csmaNode0" ,350, 9],["csmaNode1", 350, 10]]
-csmaTier1_info = [["csmaNode0" ,350, 14],["csmaNode1", 350, 15]]
-csmaTier2_info = [["csmaNode0" ,350, 59],["csmaNode1", 350, 60]]
-                
+
+def set_com(a, b):  # a <= x < b
+    temp = random.uniform(a, b)
+    return temp
+
+t1 = 7
+t2 = 12
+t3 = 60
+
+csmaTier0_info = [["csmaNode0" ,350, set_com(t1-2, t1-1)],["csmaNode1", 350, set_com(t1-1, t1)], ["csmaNode1", 350, set_com(t1, t1+1)]]  # node 3개 4
+csmaTier1_info = [["csmaNode0" ,350, set_com(t2-2, t2-1)],["csmaNode1", 350, set_com(t2-1, t2)], ["csmaNode1", 350, set_com(t2, t2+1)]]  # 
+csmaTier2_info = [["csmaNode0" ,350, set_com(t3-2, t3-1)],["csmaNode1", 350, set_com(t3-1, t3)], ["csmaNode1", 350, set_com(t3, t3+1)]]  # 
+
+max0 = max(csmaTier0_info[0][2], csmaTier0_info[1][2], csmaTier0_info[2][2])
+max1 = max(csmaTier1_info[0][2], csmaTier1_info[1][2], csmaTier1_info[2][2])
+max2 = max(csmaTier2_info[0][2], csmaTier2_info[1][2], csmaTier2_info[2][2])
+
+information = [["csmaTier0", 1000, "x", 50, 100, max0],
+               ["csmaTier1", 1000, 1000, 50, 100, max1], 
+               ["csmaTier2", "x", 1000, 50, 100, max2]]
+
+#module.input("csmaNodes1", 100, 10, 1, 50)
+#module.show()
 #############################################################################################################
 mobility = ns.mobility.MobilityHelper()
 mobility.SetPositionAllocator ("ns3::GridPositionAllocator", 
@@ -203,4 +249,9 @@ ns.internet.Ipv4GlobalRoutingHelper.PopulateRoutingTables()
 
 ns.core.Simulator.Stop(ns.core.Seconds(10.0))
 #############################################################################################################
+#pointToPoint.EnablePcapAll ("inter_intra")
+#phy.EnablePcap ("inter_intra", apDevices.Get (0))
+#csma.EnablePcap ("inter_intra", csmaDevices.Get (0), True)
 
+#ns.core.Simulator.Run()
+#ns.core.Simulator.Destroy()
