@@ -27,7 +27,7 @@
   (H/W)
   - CPU: 12th Gen Intel(R) Core(TM) i7-12700K 3.60 GHz
   - MEM: 32GB
-  - SSD/HDD:
+  - SSD/HDD: 1TB/4TB
     
   (S/W)
   - OS: Ubuntu 64-bit 20.04
