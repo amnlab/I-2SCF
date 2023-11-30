@@ -92,7 +92,7 @@ for i in range(3):
         if Tier_[i][j] == 13:   
             Tier_[i][j] = 9
 
-print("[Inter Policy]")
+print("[Inter-Layer Split Policy]")
 for i in range(3):
     print("Tier", i, "Splitting Point :", Tier_print[i])
 
@@ -191,7 +191,7 @@ Node_[2].append([0, 0, 2])
 Node_[2].append([0, 0, 2])
 Node_[2].append([0, 0, 2])
 Node_[2].append([0, 0, 1])
-print("[Intra Policy]")
+print("[Intra-Layer Split Policy]")
 for i in range(3):
     print("Tier", i, "Splitting Point :", Node_[i])
     
