@@ -16,7 +16,7 @@ from silence_tensorflow import silence_tensorflow
 silence_tensorflow()
 if(0 not in central_node.Tier_print[0]):
     print("======================================================================================")
-    print("Inter Node0 Execute")
+    print("Inter Node 1 Execute")
     print("======================================================================================")
 
     start_Layer0 = central_node.Tier_print[0][0]
@@ -53,14 +53,14 @@ if(0 not in central_node.Tier_print[0]):
     for i in range (start_Layer0, end_Layer0 + 1):
         compute0 = compute0 + central_node.F_l[i-1]
     latency0 = round(compute0 / inter_intra.information[0][5])
-    print("computing latency0 :", latency0)
+    print("computing latency :", latency0)
     # transmission latency
     Mbyte = sys.getsizeof(intermediate_result0)/1000000
     Mbit = Mbyte * 8
     latency0 = latency0 + round(Mbit / inter_intra.information[1][1])
     tansmission_latency0 = round(Mbit / inter_intra.information[1][1])
-    print('transmission latency0 :', tansmission_latency0)
-    print('inference latency0 :', latency0)
+    print('transmission latency :', tansmission_latency0)
+    print('inference latency :', latency0)
     
     sleep_time = round(Mbit / inter_intra.information[1][1])
     start = time.ctime()
