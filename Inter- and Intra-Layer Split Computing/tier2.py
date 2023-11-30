@@ -17,7 +17,7 @@ import sys
 silence_tensorflow()
 if(0 not in central_node.Tier_[2]):
     print("======================================================================================")
-    print("Inter-Intra Tier2 Execute")
+    print("Inter-Intra Tier 3 Execute")
     print("======================================================================================")
     start_Layer2 = central_node.Tier_[2][0]
     end_Layer2 = central_node.Tier_[2][1]
@@ -41,7 +41,7 @@ if(0 not in central_node.Tier_[2]):
         if split_point1 != 0:
             input_data = intermediate_result
             print("input data shape :", input_data.shape)
-            print("-----------Node 0 execute-----------")
+            print("-----------Node 1 execute-----------")
             # create model
             model1 = Sequential()
             model1 = split_model.add_model(model1, i, split_point1, split_point2, 0)
@@ -56,7 +56,7 @@ if(0 not in central_node.Tier_[2]):
             # weight_len = weight_len + len(weights0)
             intermediate_result0 = model1.predict(input_data)
 
-        print("-----------node 1 execute-----------")
+        print("-----------node 2 execute-----------")
         input_data = intermediate_result
         # create model
         model2 = Sequential()
@@ -72,7 +72,7 @@ if(0 not in central_node.Tier_[2]):
         # weight_len = weight_len + len(weights1)
         intermediate_result1 = model2.predict(input_data)
 
-        print("-----------node 2 execute-----------")
+        print("-----------node 3 execute-----------")
         input_data = intermediate_result
         # create model
         model3 = Sequential()
